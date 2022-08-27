@@ -1,0 +1,5 @@
+trocar esses dados para o aplication properties e h2 para cá!
+
+spring.profiles.active=test
+
+spring.jpa.open-in-view=false
