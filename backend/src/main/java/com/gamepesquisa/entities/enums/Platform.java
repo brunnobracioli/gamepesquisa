@@ -1,4 +1,4 @@
-package com.gamepesquisa.entitys.enums;
+package com.gamepesquisa.entities.enums;
 
 public enum Platform {
 	PC, PLAYSTATION, XBOX
