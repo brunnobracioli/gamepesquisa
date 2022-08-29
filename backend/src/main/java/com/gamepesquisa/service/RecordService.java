@@ -3,6 +3,8 @@ package com.gamepesquisa.service;
 import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +39,13 @@ public class RecordService {
 		
 		entity = repository.save(entity);
 		return new RecordDto(entity);
+	}
+	
+	// quando colocamos readOnly no transactional é para apenas assegurar a integridade de busca.
+	// O banco de dados está retornando uma entidade Record, temos que converter para RecordDto usando strems
+	@Transactional(readOnly = true)
+	public Page<RecordDto> findByMoments(Instant minDate, Instant maxDate, PageRequest pageRequest) {
+		return repository.findByMoments(minDate, maxDate, pageRequest).map(x -> new RecordDto(x));
 	}
 
 }
