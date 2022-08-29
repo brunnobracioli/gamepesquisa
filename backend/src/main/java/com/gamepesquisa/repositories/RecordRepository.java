@@ -15,8 +15,8 @@ import com.gamepesquisa.entities.Record;
 public interface RecordRepository extends JpaRepository<Record, Long> {
 
 	@Query("SELECT obj FROM Record obj WHERE "
-			+ "(:minDate IS NULL OR obj.moment >= :minDate) AND "
-			+ "(:maxDate IS NULL OR obj.moment <= :maxDate)")
+			+ "(coalesce(:minDate, null) IS NULL OR obj.moment >= :minDate) AND "
+			+ "(coalesce(:maxDate, null) IS NULL OR obj.moment <= :maxDate)")
 	Page<Record> findByMoments(Instant minDate, Instant maxDate, Pageable pageRequest);
 
 	
