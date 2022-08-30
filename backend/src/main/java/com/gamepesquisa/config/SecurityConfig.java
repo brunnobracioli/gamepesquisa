@@ -10,30 +10,25 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-	@Autowired
-	private Environment env;
+	@Bean
+	public SecurityFilterChain filterchain(HttpSecurity http) throws Exception {
 
-	private static final String[] PUBLIC_MATCHERS = { "/**" };
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-
-		// H2
-		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
-			http.headers().frameOptions().disable();
-		}
-		
+		http.headers().frameOptions().disable();
 		http.cors().and().csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests().antMatchers(PUBLIC_MATCHERS).permitAll();
+		http.authorizeHttpRequests((auth) -> auth.anyRequest().permitAll());
+
+		return http.build();
+
 	}
 
 	@Bean
@@ -44,4 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
+
+
+
 }
