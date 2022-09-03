@@ -4,6 +4,7 @@ import { useFonts,Play_400Regular, Play_700Bold } from '@expo-google-fonts/play'
 import * as SplashScreen from 'expo-splash-screen';
 import {useCallback} from 'react'
 import Header from './src/components/Header'
+import Home from './src/pages/Home';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,6 +28,7 @@ export default function App() {
     <View style={styles.container} onLayout ={onLayoutRootView}>
       <Header />
       <StatusBar style="light" />
+      <Home />
     </View>
   );
 }
@@ -34,5 +36,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#0B1F34',
   } 
 });
+
+
