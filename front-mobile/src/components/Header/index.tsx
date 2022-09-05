@@ -3,9 +3,16 @@ import {Text, StyleSheet, View, Image} from 'react-native'
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
+
+import { RootStackPararmList } from '../../routes';
+import { NativeStackNavigationProp} from '@react-navigation/native-stack';
+
+type homeScreemProp = NativeStackNavigationProp <RootStackPararmList, "Home">
+
+
 function Header () {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<homeScreemProp>();
 
     const handleOnPress = () => {
       navigation.navigate('Home');

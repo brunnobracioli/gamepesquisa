@@ -10,6 +10,11 @@ import Home from './pages/Home'
 
 const Stack = createStackNavigator();
 
+export type RootStackPararmList = {
+    Home: undefined,
+    CreateRecord: undefined 
+}
+
 function Routes () {
     return (
 

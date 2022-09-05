@@ -6,14 +6,16 @@ import Header from '../../components/Header'
 import {useNavigation } from '@react-navigation/native'
 
 
+import { RootStackPararmList } from '../../routes';
+import { NativeStackNavigationProp} from '@react-navigation/native-stack';
+
+type homeScreemProp = NativeStackNavigationProp <RootStackPararmList, "CreateRecord">
 
 function Home () {
 
-    const navigation = useNavigation();
+    const navigation = useNavigation<homeScreemProp>();
 
-    const handleOnPress = () => {
-      navigation.navigate('CreateRecord');
-    }
+  
 
     return (
         <>
@@ -24,7 +26,7 @@ function Home () {
             <Text style={styles.subTitle}>Nos diga qual é o seu jogo favorito!</Text>
         </View>
             <View style={styles.footer}>
-              <RectButton style={styles.button} onPress={handleOnPress}>
+              <RectButton style={styles.button} onPress={() => navigation.navigate('CreateRecord')}>
                     <Text style={styles.buttonText}>COLETAR DADOS</Text>
                         <View style={styles.buttonIcon}>
                             <Text>
