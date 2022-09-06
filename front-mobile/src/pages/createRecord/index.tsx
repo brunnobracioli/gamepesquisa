@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Text, StyleSheet, View} from 'react-native'
+import {Text, StyleSheet, View, Alert} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
 import Header from '../../components/Header';
 import PlatformCard from './PlatformCard';
@@ -8,6 +8,7 @@ import RNPickerSelect from 'react-native-picker-select'
 import { Picker,   } from '@react-native-picker/picker'
 import { Value } from 'react-native-reanimated';
 import axios from 'axios';
+import { RectButton } from 'react-native-gesture-handler'
 
 
 const placeholder = {
@@ -31,9 +32,29 @@ function CreateRecord(){
   const [platform, setPlatform] = useState<GamePlatform>();
   const [selectedGame, setSelectedGame] = useState('');
   const [allGames, setAllGames] = useState<Game[]>([]);
+  const [filteredGames, setFilteradeGames] = useState<Game[]>([]);
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
 
   const handleChangePlatform = (selectedPlatform: GamePlatform) => {
     setPlatform(selectedPlatform);
+    const gamesByPlatform = allGames.filter(
+      game => game.platform === selectedPlatform
+    )
+    setFilteradeGames(gamesByPlatform);
+  }
+
+  const handleSubmit = () => {
+    const payLoad = {name, age, gameId: selectedGame}
+    axios.post(`${BASE_URL}/records`, payLoad)
+    .then(() => {
+      Alert.alert('Dados salvo com sucesso!');
+      setName('');
+      setAge('');
+      setSelectedGame('');
+      setPlatform(undefined);
+    })
+    .catch(() => Alert.alert('Erro ao salvar informações!'))
   }
 
   useEffect(() => {
@@ -42,8 +63,7 @@ function CreateRecord(){
       const selectValue = mapSelectValues(response.data)
       setAllGames(selectValue);
     })
-
-
+    .catch(() => Alert.alert('Erro ao listar os jogos!'))
   },[]);
 
 
@@ -53,11 +73,15 @@ function CreateRecord(){
         <View style={styles.container}>
 
           <TextInput
+          onChangeText={text => setName(text)}
+          value={name}
           placeholderTextColor={'#9E9E9E'}
           placeholder='Nome' 
           style ={styles.inputText}/>
 
           <TextInput
+          onChangeText={text => setAge(text)}
+          value={age}
           keyboardType='numeric'
           maxLength={2}
           placeholderTextColor={'#9E9E9E'}
@@ -69,21 +93,25 @@ function CreateRecord(){
             <PlatformCard platform='XBOX'icon="xbox" onChange={handleChangePlatform} activePlatform={platform}/>
             <PlatformCard platform='PLAYSTATION' icon="playstation" onChange={handleChangePlatform} activePlatform={platform}/>      
           </View> 
-           {/*<RNPickerSelect
+          <RNPickerSelect
           onValueChange={value => {setSelectedGame(value)}} 
+          value={selectedGame}
           placeholder={placeholder}
-          items={[
-            {label: 'football', value: 'football' },
-            {label: 'baseball', value: 'baseball' },
-            {label: 'hockey', value: 'hockey' }
-          ]} 
+          items={filteredGames} 
           style={pickerSelectStyles}
           >
-
           </RNPickerSelect>
-        */}
+
+          <View style={styles.footer}>
+            <RectButton style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}> SALVAR </Text>
+            </RectButton>
+          </View>
+
+
         
-        <Picker
+        
+         {/*<Picker
         selectedValue={selectedGame}
         onValueChange={(itemValue, itemIndex) =>
         setSelectedGame(itemValue)
@@ -91,6 +119,7 @@ function CreateRecord(){
         }>
         <Picker.Item label={allGames} />
         </Picker>
+        */}
 
         </View>
         
